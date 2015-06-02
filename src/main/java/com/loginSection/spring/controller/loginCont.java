@@ -2,7 +2,11 @@ package com.loginSection.spring.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import com.loginSection.spring.jsonFit;
+import com.loginSection.spring.model.User;
+import com.loginSection.spring.model.UserDAO;
+import com.loginSection.spring.model.UserDAOImpl;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +25,24 @@ public class loginCont {
 	
 	@RequestMapping(value="/signup",method=RequestMethod.POST,produces="application/json")
 	public @ResponseBody jsonFit signupAction(HttpServletRequest request,Model model){
-		System.out.println(request.getParameter("FirstName").length());
+		System.out.println(request.getParameter("FirstName"));
 		//System.out.println(request.getParameter("nma"));
 		//model.addAttribute("response","{msgType:error,msg:Invalid ID}");
 		String str = basicValidations(request);
 		System.out.println(str + "-----");
 		if(str!=null)
 			return  new jsonFit("error",str);
-		 return new jsonFit("error","Invalid ID");
+		
+		User user = new User();
+		
+		user.setFirstName(request.getParameter("FirstName"));
+		user.setLastName(request.getParameter("LastName"));
+		user.setEmail(request.getParameter("FromEmailAddress"));
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+		UserDAO userDAO = context.getBean(UserDAO.class);
+		userDAO.saveUser(user);
+		
+		 return new jsonFit("success","Account created successfully");
 		
 		
 	}
@@ -37,6 +51,10 @@ public class loginCont {
 		
 		if(request.getParameter("FirstName")==null || request.getParameter("FirstName").isEmpty() )
 			return "Please enter first name";
+		if(request.getParameter("LastName")==null || request.getParameter("LastName").isEmpty() )
+			return "Please enter last name";
+		if(request.getParameter("FromEmailAddress")==null || request.getParameter("FromEmailAddress").isEmpty() )
+			return "Please enter Email";
 		return null;
 	}
 }

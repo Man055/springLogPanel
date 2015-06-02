@@ -8,8 +8,9 @@ public class UserDAOImpl implements UserDAO {
 	
 	private SessionFactory sessionFactory;
 	public String saveUser(User user){
+		System.out.println("------");
 		Session session = this.sessionFactory.openSession();
-		session.persist(user);
+		session.save(user);
 		session.close();
 		return null;
 	}
