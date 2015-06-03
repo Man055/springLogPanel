@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,10 +11,10 @@
 
 <body>
 <h2>Sign Up</h2>
-<form action="javascript:;" method="post" onsubmit="return ValidateForm(this);">
+<form:form action="signup" method="post" modelAttribute="uploadBanner" enctype="multipart/form-data" onsubmit="return true;ValidateForm(this,event);">
 <input id="SnapHostID" name="SnapHostID" type="hidden" value="JH3LDWRSL3RL" />
 <script type="text/javascript">
-function ValidateForm(frm) {
+function ValidateForm(frm,e) {
 //if (frm.FirstName.value == "") {alert('First Name is required.');frm.FirstName.focus();return false;}
 //if (frm.LastName.value == "") {alert('Last Name is required.');frm.LastName.focus();return false;}
 //if (frm.Organization.value == "") {alert('Organization is required.');frm.Organization.focus();return false;}
@@ -23,18 +24,30 @@ function ValidateForm(frm) {
 //if (frm.City.value == "") {alert('City is required.');frm.City.focus();return false;}
 //if (frm.Country.value == "") {alert('Country is required.');frm.Country.focus();return false;}
 //if (frm.CaptchaCode.value == "") {alert('Enter web form code.');frm.CaptchaCode.focus();return false;}
+Form = new FormData();
+Form.append("FirstName",$("#FirstName").val());
+Form.append("LastName",$("#LastName").val());
+Form.append("FromEmailAddress",$("#FromEmailAddress").val());
 
 $.ajax({
 	url:'signup',
 	method:'POST',
-	//contentType: "application/json",
+	contentType: false,
 	dataType:'json',
-	data:$('form').serialize(),
+	data:Form,
+	processData:false,
 	success:function(data){
 		alert(data.msg);
+		Form=new FormData();
 	}
 })
 
+}
+var Form = new FormData();
+function triFile(event){
+	Form = new FormData();
+	console.log(event);
+	event.target?Form.append("uploadBanner",event.target.files[0]):'';
 }
 function ReloadCaptchaImage(captchaImageId) {
 var obj = document.getElementById(captchaImageId);
@@ -53,38 +66,15 @@ return false; }
 <input id="LastName" name="LastName" type="text" maxlength="60" style="width:146px; border:1px solid #999999" />
 </td>
 </tr><tr>
-<td><b>Organization*:</b></td>
-<td><input id="Organization" name="Organization" type="text" maxlength="60" style="width:300px; border:1px solid #999999" /></td>
-</tr><tr>
 <td><b>Email address*:</b></td>
 <td><input id="FromEmailAddress" name="FromEmailAddress" type="text" maxlength="60" style="width:300px; border:1px solid #999999" /></td>
+</tr>
+<tr>
+<td><b>Password*:</b></td>
+<td><input id="Organization" name="password" type="password" maxlength="60" style="width:300px; border:1px solid #999999" /></td>
 </tr><tr>
-<td><b>Work Phone:</b></td>
-<td><input id="WorkPhone" name="WorkPhone" type="text" maxlength="43" style="width:250px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>Home Phone:</b></td>
-<td><input id="HomePhone" name="HomePhone" type="text" maxlength="43" style="width:250px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>Cell Phone:</b></td>
-<td><input id="CellPhone" name="CellPhone" type="text" maxlength="43" style="width:250px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>Address 1*:</b></td>
-<td><input id="StreetAddress1" name="StreetAddress1" type="text" maxlength="120" style="width:350px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>Address 2:</b></td>
-<td><input id="StreetAddress2" name="StreetAddress2" type="text" maxlength="120" style="width:350px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>City*:</b></td>
-<td><input id="City" name="City" type="text" maxlength="120" style="width:300px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>State/Province:</b></td>
-<td><input id="State" name="State" type="text" maxlength="120" style="width:300px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>Zip/Postal Code:</b></td>
-<td><input id="Zip" name="Zip" type="text" maxlength="30" style="width:100px; border:1px solid #999999" /></td>
-</tr><tr>
-<td><b>Country*:</b></td>
-<td><input id="Country" name="Country" type="text" maxlength="120" style="width:300px; border:1px solid #999999" /></td>
+<td><b>Banner Image (Allow jpg,png,gif):</b></td>
+<td><input id="banner" name="banner" type="file"  style="width:300px; border:1px solid #999999" onchange="triFile(event)" /></td>
 </tr><tr>
 <td colspan="2" align="center">
 <br />
@@ -108,6 +98,6 @@ src="http://www.SnapHost.com/captcha/WebForm.aspx?id=JH3LDWRSL3RL&ImgType=2" /><
 </tr>
 </table>
 <br />
-</form>
+</form:form>
 </body>
 </html>
