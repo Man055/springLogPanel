@@ -46,12 +46,15 @@ public class loginCont {
 		if(!fileUploading(request.getFile("uploadBanner")))
 			return new jsonFit("error","We are unable to upload banner image");
 		User user = new User();
-		
-		user.setFirstName(request.getParameter("FirstName"));
-		user.setLastName(request.getParameter("LastName"));
 		user.setEmail(request.getParameter("FromEmailAddress"));
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 		UserDAO userDAO = context.getBean(UserDAO.class);
+		if(userDAO.verifyUser(user))
+			return new jsonFit("error","Email Id is already registered");
+		user.setFirstName(request.getParameter("FirstName"));
+		user.setLastName(request.getParameter("LastName"));
+		
+		
 		userDAO.saveUser(user);
 		
 		 return new jsonFit("success","Account created successfully");
