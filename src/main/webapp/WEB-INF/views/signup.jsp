@@ -11,7 +11,7 @@
 
 <body>
 <h2>Sign Up</h2>
-<form:form action="signup" method="post" modelAttribute="uploadBanner" enctype="multipart/form-data" onsubmit="return true;ValidateForm(this,event);">
+<form:form action="javascript:;" method="post" modelAttribute="uploadBanner" enctype="multipart/form-data" onsubmit="return ValidateForm(this,event);">
 <input id="SnapHostID" name="SnapHostID" type="hidden" value="JH3LDWRSL3RL" />
 <script type="text/javascript">
 function ValidateForm(frm,e) {
@@ -24,7 +24,7 @@ function ValidateForm(frm,e) {
 //if (frm.City.value == "") {alert('City is required.');frm.City.focus();return false;}
 //if (frm.Country.value == "") {alert('Country is required.');frm.Country.focus();return false;}
 //if (frm.CaptchaCode.value == "") {alert('Enter web form code.');frm.CaptchaCode.focus();return false;}
-Form = new FormData();
+
 Form.append("FirstName",$("#FirstName").val());
 Form.append("LastName",$("#LastName").val());
 Form.append("FromEmailAddress",$("#FromEmailAddress").val());

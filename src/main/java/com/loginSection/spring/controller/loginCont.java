@@ -34,7 +34,7 @@ public class loginCont {
 	
 	public @ResponseBody jsonFit signupAction(MultipartHttpServletRequest  request,Model model,@ModelAttribute("uploadBanner") UploadBanner banner){
 		try{
-		System.out.println(banner.getBanner());
+		System.out.println(request.getFile("uploadBanner"));
 		}catch(Exception e){e.printStackTrace();
 		}
 		//System.out.println(request.getParameter("nma"));
@@ -43,7 +43,7 @@ public class loginCont {
 		System.out.println(str + "-----");
 		if(str!=null)
 			return  new jsonFit("error",str);
-		if(!fileUploading(banner))
+		if(!fileUploading(request.getFile("uploadBanner")))
 			return new jsonFit("error","We are unable to upload banner image");
 		User user = new User();
 		
@@ -70,9 +70,9 @@ public class loginCont {
 		return null;
 	}
 	
-	private boolean fileUploading(UploadBanner banner){
+	private boolean fileUploading(MultipartFile bannerFile){
 		String Directory = "/tmp/";
-		MultipartFile  bannerFile =banner.getBanner();
+		
 		if(bannerFile==null) return false;
 		MultipartFile file = bannerFile;
 		
